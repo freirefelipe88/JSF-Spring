@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog id="modalAssociateUser" widgetVar="modalAssociateUser"
+	modal="true" header="#{mBeanPermission.header}" position="center"
+	responsive="true"
+	width="50%">
+	<h:form id="formAssociateUser">
+		<p:messages rendered="#{!mBeanPermission.renderGlobalMessage}" closable="true" />
+		<p:panelGrid layout="grid" columns="1">
+			<p:outputLabel value="Users:" for="users" />
+			<p:pickList id="users" 
+				value="#{mBeanPermission.users}" 
+				var="user"
+				itemLabel="#{user.name}" 
+				itemValue="#{user}"
+				responsive="true" 
+				showSourceFilter="true" 
+				showTargetFilter="true"
+				filterMatchMode="contains" 
+				converter="#{userConverter}">
+				<f:facet name="sourceCaption">Available</f:facet>
+        		<f:facet name="targetCaption">Associated</f:facet>
+			</p:pickList>
+		</p:panelGrid>
+
+		<div>
+			<p:commandButton value="Cancel"
+				onclick="PF('modalAssociateUser').hide();" />
+			<p:commandButton value="Save" action="#{mBeanPermission.associateUser}"
+				update=":formPermission formAssociateUser" />
+		</div>
+	</h:form>
+</p:dialog>
+</html>

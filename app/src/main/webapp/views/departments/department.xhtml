@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Permissions</title>
+</h:head>
+<h:body>
+	<h:form id="formDepartment">
+		<p:breadCrumb>
+			<p:menuitem value="Home" url="/views/index.app" />
+			<p:menuitem value="Departments" url="#" />
+		</p:breadCrumb>
+
+		<p:messages rendered="#{mBeanDepartment.renderGlobalMessage}" closable="true" />
+		<p:commandButton value="Add"
+			actionListener="#{mBeanDepartment.typeOperationInsert}"
+			update=":formAddDepartment"
+			oncomplete="PF('modalAddDepartment').show();"
+			style="margin: 1%;" />
+
+
+		<p:dataTable id="departments"
+			widgetVar="departments"
+			value="#{mBeanDepartment.departmentList}" var="department"
+			filteredValue="#{mBeanDepartment.filteredDepartmentList}"
+			emptyMessage="No records found."
+			reflow="true">
+			<f:facet name="header">
+				<p:outputPanel style="text-align: right;">
+					<h:outputText value="Search all fields:" />
+					<p:inputText id="globalFilter" onkeyup="PF('departments').filter()"
+						style="width:150px" placeholder="Enter keyword" />
+				</p:outputPanel>
+			</f:facet>
+			
+			<p:column headerText="Id" sortBy="#{department.id}" filterBy="#{department.id}">
+				<h:outputText value="#{department.id}"/>
+			</p:column>
+			<p:column headerText="Name" sortBy="#{department.name}" filterBy="#{department.name}">
+				<h:outputText value="#{department.name}"/>
+			</p:column>
+			<p:column headerText="Description" sortBy="#{department.description}" filterBy="#{department.description}">
+				<h:outputText value="#{department.description}"/>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Users" 
+					actionListener="#{mBeanDepartment.typeOperationAssociate(department)}"
+					oncomplete="PF('modalAssociateUser').show();"
+					update=":modalAssociateUser" />
+			</p:column>
+			<p:column>
+				<p:commandButton value="Update" 
+					actionListener="#{mBeanDepartment.typeOperationUpdate(department)}" 
+					update=":modalUpdateDepartment" 
+					oncomplete="PF('modalUpdateDepartment').show();"
+					resetValues="true"/>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Remove" 
+					actionListener="#{mBeanDepartment.typeOperationDelete(department)}"
+					oncomplete="PF('modalDeleteDepartment').show();" 
+					update=":removeDepartment:modalDeleteDepartment"/>
+			</p:column>
+		</p:dataTable>
+
+
+	</h:form>
+	<h:form id="removeDepartment">
+		<p:confirmDialog id="modalDeleteDepartment" widgetVar="modalDeleteDepartment" header="Delete Department">
+			<f:facet name="message">
+				Are you sure to delete department <b>#{mBeanDepartment.department.name}?</b>
+			</f:facet>
+			<p:commandButton value="Yes" action="#{mBeanDepartment.delete}" 
+				update=":formDepartment"
+				oncomplete="PF('modalDeleteDepartment').hide();"/>
+			<p:commandButton value="No" oncomplete="PF('modalDeleteDepartment').hide();" />
+		</p:confirmDialog>
+	</h:form>
+	<ui:include src="../../includes/departments/modalAddDepartment.xhtml" />
+	<ui:include src="../../includes/departments/modalUpdateDepartment.xhtml" />
+	<ui:include src="../../includes/departments/modalAssociateUser.xhtml" />
+</h:body>
+</html>

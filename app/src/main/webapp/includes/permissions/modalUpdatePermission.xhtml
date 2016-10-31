@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:dialog id="modalUpdatePermission" widgetVar="modalUpdatePermission"
+	modal="true" header="#{mBeanPermission.header}" position="center"
+	responsive="true">
+	<h:form id="formUpdatePermission">
+		<p:messages rendered="#{!mBeanPermission.renderGlobalMessage}"/>
+		
+		<div class="ui-g">
+			<div class="ui-g-12 ui-lg-4">
+				<p:outputLabel value="ID" />
+			</div>
+			<div class="ui-g-12 ui-lg-4">
+				<h:outputText value="#{mBeanPermission.permission.id}" />
+			</div>
+		</div>
+		
+		<div class="ui-g">
+			<div class="ui-g-12 ui-lg-4">
+				<p:outputLabel value="Name" for="name" />
+			</div>
+			<div class="ui-g-12 ui-lg-4">
+				<p:inputText id="name"
+					value="#{mBeanPermission.permission.name}" 
+					required="true"
+					requiredMessage="Name field is mandatory!" />
+			</div>
+		</div>
+
+		<div class="ui-g">
+			<div class="ui-g-12 ui-lg-4">
+				<p:outputLabel value="Description" for="description" />
+			</div>
+			<div class="ui-g-12 ui-lg-4">
+				<p:inputTextarea id="description" value="#{mBeanPermission.permission.description}"  rows="5" cols="30" counter="display" maxlength="200" counterTemplate="{0} characters remaining." autoResize="false" />
+   			 	<h:outputText id="display" />
+			</div>
+		</div>
+		
+		<div>
+			<p:commandButton value="Cancel" onclick="PF('modalUpdatePermission').hide();"/>
+			<p:commandButton value="Save" action="#{mBeanPermission.update}" update=":formPermission formUpdatePermission"/>
+		</div>
+	</h:form>
+</p:dialog>
+</html>

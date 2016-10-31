@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Permissions</title>
+</h:head>
+<h:body>
+	<h:form id="formPermission">
+		<p:breadCrumb>
+			<p:menuitem value="Home" url="/views/index.app" />
+			<p:menuitem value="Permissions" url="#" />
+		</p:breadCrumb>
+
+		<p:messages rendered="#{mBeanPermission.renderGlobalMessage}" closable="true" />
+		<p:commandButton value="Add"
+			actionListener="#{mBeanPermission.typeOperationInsert}"
+			update=":formAddPermission"
+			oncomplete="PF('modalAddPermission').show();"
+			style="margin: 1%;" />
+
+
+		<p:dataTable id="permissions"
+			widgetVar="permissions"
+			value="#{mBeanPermission.permissionList}" var="permission"
+			filteredValue="#{mBeanPermission.filteredPermissionList}"
+			emptyMessage="No records found."
+			reflow="true">
+			<f:facet name="header">
+				<p:outputPanel style="text-align: right;">
+					<h:outputText value="Search all fields:" />
+					<p:inputText id="globalFilter" onkeyup="PF('permissions').filter()"
+						style="width:150px" placeholder="Enter keyword" />
+				</p:outputPanel>
+			</f:facet>
+			
+			<p:column headerText="Id" sortBy="#{permission.id}" filterBy="#{permission.id}">
+				<h:outputText value="#{permission.id}"/>
+			</p:column>
+			<p:column headerText="Name" sortBy="#{permission.name}" filterBy="#{permission.name}">
+				<h:outputText value="#{permission.name}"/>
+			</p:column>
+			<p:column headerText="Description" sortBy="#{permission.description}" filterBy="#{permission.description}">
+				<h:outputText value="#{permission.description}"/>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Users" 
+					actionListener="#{mBeanPermission.typeOperationAssociate(permission)}"
+					oncomplete="PF('modalAssociateUser').show();"
+					update=":modalAssociateUser" />
+			</p:column>
+			<p:column>
+				<p:commandButton value="Update" 
+					actionListener="#{mBeanPermission.typeOperationUpdate(permission)}" 
+					update=":modalUpdatePermission" 
+					oncomplete="PF('modalUpdatePermission').show();"
+					resetValues="true"/>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Remove" 
+					actionListener="#{mBeanPermission.typeOperationDelete(permission)}"
+					oncomplete="PF('modalDeletePermission').show();" 
+					update=":removePermission:modalDeletePermission"/>
+			</p:column>
+		</p:dataTable>
+
+
+	</h:form>
+	<h:form id="removePermission">
+		<p:confirmDialog id="modalDeletePermission" widgetVar="modalDeletePermission" header="Delete Permission">
+			<f:facet name="message">
+				Are you sure to delete permission <b>#{mBeanPermission.permission.name}?</b>
+			</f:facet>
+			<p:commandButton value="Yes" action="#{mBeanPermission.delete}" 
+				update=":formPermission"
+				oncomplete="PF('modalDeletePermission').hide();"/>
+			<p:commandButton value="No" oncomplete="PF('modalDeletePermission').hide();" />
+		</p:confirmDialog>
+	</h:form>
+	<ui:include src="../../includes/permissions/modalAddPermission.xhtml" />
+	<ui:include src="../../includes/permissions/modalUpdatePermission.xhtml" />
+	<ui:include src="../../includes/permissions/modalAssociateUser.xhtml" />
+</h:body>
+</html>

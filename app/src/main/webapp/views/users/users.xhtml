@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Users</title>
+</h:head>
+<h:body>
+	<h:form id="formUser">
+		<p:breadCrumb>
+			<p:menuitem value="Home" url="/views/index.app" />
+			<p:menuitem value="Users" url="#" />
+		</p:breadCrumb>
+
+		<p:messages rendered="#{mBeanUser.renderGlobalMessage}" closable="true" />
+		<p:commandButton value="Add"
+			actionListener="#{mBeanUser.typeOperationInsert}"
+			update=":formAddUser"
+			oncomplete="PF('modalAddUser').show();"
+			style="margin: 1%;" />
+
+
+		<p:dataTable id="users"
+			widgetVar="users"
+			value="#{mBeanUser.userList}" var="user"
+			filteredValue="#{mBeanUser.filteredUserList}"
+			emptyMessage="No records found."
+			reflow="true">
+			<f:facet name="header">
+				<p:outputPanel style="text-align: right;">
+					<h:outputText value="Search all fields:" />
+					<p:inputText id="globalFilter" onkeyup="PF('users').filter()"
+						style="width:150px" placeholder="Enter keyword" />
+				</p:outputPanel>
+			</f:facet>
+			
+			<p:column headerText="Id" sortBy="#{user.id}" filterBy="#{user.id}">
+				<h:outputText value="#{user.id}"/>
+			</p:column>
+			<p:column headerText="Name" sortBy="#{user.name}" filterBy="#{user.name}">
+				<h:outputText value="#{user.name}"/>
+			</p:column>
+			<p:column headerText="Description" sortBy="#{user.description}" filterBy="#{user.description}">
+				<h:outputText value="#{user.description}"/>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Permissions" 
+					actionListener="#{mBeanUser.typeOperationAssociate(user)}"
+					oncomplete="PF('modalAssociateUser').show();"
+					update=":modalAssociateUser" />
+			</p:column>
+			<p:column>
+				<p:commandButton value="Update" 
+					actionListener="#{mBeanUser.typeOperationUpdate(user)}" 
+					update=":modalUpdateUser" 
+					oncomplete="PF('modalUpdateUser').show();"
+					resetValues="true"/>
+			</p:column>
+			<p:column>
+				<p:commandButton value="Remove" 
+					actionListener="#{mBeanUser.typeOperationDelete(user)}"
+					oncomplete="PF('modalDeleteUser').show();" 
+					update=":removeUser:modalDeleteUser"/>
+			</p:column>
+		</p:dataTable>
+
+
+	</h:form>
+	<h:form id="removeUser">
+		<p:confirmDialog id="modalDeleteUser" widgetVar="modalDeleteUser" header="Delete User">
+			<f:facet name="message">
+				Are you sure to delete user <b>#{mBeanUser.user.name}?</b>
+			</f:facet>
+			<p:commandButton value="Yes" action="#{mBeanUser.delete}" 
+				update=":formUser"
+				oncomplete="PF('modalDeleteUser').hide();"/>
+			<p:commandButton value="No" oncomplete="PF('modalDeleteUser').hide();" />
+		</p:confirmDialog>
+	</h:form>
+	<ui:include src="../../includes/users/modalAddUser.xhtml" />
+	<ui:include src="../../includes/users/modalUpdateUser.xhtml" />
+	<ui:include src="../../includes/users/modalAssociatePermission.xhtml" />
+</h:body>
+</html>
