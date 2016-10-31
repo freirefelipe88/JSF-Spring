@@ -4,11 +4,14 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(schema = "freire")
@@ -20,7 +23,8 @@ public class Department {
 	private String name;
 	private String description;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="department_id")
 	private List<User> userList;
 	

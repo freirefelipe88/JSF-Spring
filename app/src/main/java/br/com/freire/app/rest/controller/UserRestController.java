@@ -29,9 +29,44 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="/user/{userId}", method=RequestMethod.GET)
-    public @ResponseBody User getPeopleForTeam(@PathVariable long userId) {
-        return this.getUserService().findById(userId);
+    public @ResponseBody User findById(@PathVariable long userId) {
+        User user = this.getUserService().findById(userId);
+		
+        return user;
     }
+	
+	@RequestMapping(value = "/saveUser/{name}", method = RequestMethod.GET)
+	public @ResponseBody User save(@PathVariable String name){
+		
+		User user = new User();
+		user.setName(name);
+		
+		return this.getUserService().save(user);
+		
+		
+	}
+	
+	@RequestMapping(value = "/editUser/{id}/{name}/{description}")
+	public @ResponseBody User edit(@PathVariable("id") long id, @PathVariable("name") String name, @PathVariable("description") String description){
+		
+		User user = new User();
+		user.setId(id);
+		user.setName(name);
+		user.setDescription(description);
+		
+		return this.getUserService().save(user);
+	}
+	
+	@RequestMapping(value = "/deleteUser/{id}")
+	public @ResponseBody String remove(@PathVariable("id") long id){
+		
+		User user = this.getUserService().findById(id);
+		this.getUserService().remove(user);
+		
+		return "User " + user.getName() + " removed with success!";
+	}
+	
+	
 
 	public UserService getUserService() {
 		return userService;

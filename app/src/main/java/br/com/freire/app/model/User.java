@@ -23,7 +23,7 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<UserHasPermissions> userHasPermissions;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Department department;
 	
 	public User() {
