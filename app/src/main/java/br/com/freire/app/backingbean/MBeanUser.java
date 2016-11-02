@@ -27,7 +27,7 @@ public class MBeanUser {
 
 	@ManagedProperty(value = "#{userServiceImpl}")
 	private UserService userService;
-	
+
 	@ManagedProperty(value = "#{permissionServiceImpl}")
 	private PermissionService permissionService;
 
@@ -51,7 +51,13 @@ public class MBeanUser {
 	}
 
 	private void reloadView() {
-		this.setUserList(this.getUserService().list());
+		try {
+			this.setUserList(this.getUserService().list());
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("An error happenned, please call the system administrator."));
+		}
 	}
 
 	public boolean validateForm() {
@@ -71,14 +77,20 @@ public class MBeanUser {
 	}
 
 	public void save() {
-		if (this.validateForm()) {
+		try {
+			if (this.validateForm()) {
 
-			this.user = this.getUserService().save(this.getUser());
-			this.setRenderGlobalMessage(true);
+				this.user = this.getUserService().save(this.getUser());
+				this.setRenderGlobalMessage(true);
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(String.format("User [%s] saved with success!", this.getUser().getName())));
+				RequestContext.getCurrentInstance().execute("PF('modalAddUser').hide();");
+				this.reloadView();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(String.format("User [%s] saved with success!", this.getUser().getName())));
-			RequestContext.getCurrentInstance().execute("PF('modalAddUser').hide();");
-			this.reloadView();
+					new FacesMessage("An error happenned, please call the system administrator."));
 		}
 	}
 
@@ -91,16 +103,20 @@ public class MBeanUser {
 	}
 
 	public void update() {
-
-		if (this.validateForm()) {
-			this.user = this.getUserService().update(this.getUser());
-			this.setRenderGlobalMessage(true);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-					String.format("User [%s] updated with success!", this.getUser().getName())));
-			RequestContext.getCurrentInstance().execute("PF('modalUpdateUser').hide();");
-			this.reloadView();
+		try {
+			if (this.validateForm()) {
+				this.user = this.getUserService().update(this.getUser());
+				this.setRenderGlobalMessage(true);
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(String.format("User [%s] updated with success!", this.getUser().getName())));
+				RequestContext.getCurrentInstance().execute("PF('modalUpdateUser').hide();");
+				this.reloadView();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("An error happenned, please call the system administrator."));
 		}
-
 	}
 
 	public void typeOperationDelete(User user) {
@@ -110,55 +126,71 @@ public class MBeanUser {
 	}
 
 	public void delete() {
-		this.getUserService().remove(this.getUser());
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-				String.format("User [%s] removed with success!", this.getUser().getName())));
-		this.reloadView();
+		try {
+			this.getUserService().remove(this.getUser());
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(String.format("User [%s] removed with success!", this.getUser().getName())));
+			this.reloadView();
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("An error happenned, please call the system administrator."));
+		}
 	}
 
 	public void typeOperationAssociate(User user) {
-		this.setHeader(String.format("Associate users to user %s", user.getName()));
-		this.setRenderGlobalMessage(false);
-		this.setUser(user);
+		try {
+			this.setHeader(String.format("Associate users to user %s", user.getName()));
+			this.setRenderGlobalMessage(false);
+			this.setUser(user);
 
-		List<Permission> permissionsSource = this.getPermissionService().list();
-		List<Permission> permissionsTarget = new ArrayList<Permission>(0);
+			List<Permission> permissionsSource = this.getPermissionService().list();
+			List<Permission> permissionsTarget = new ArrayList<Permission>(0);
 
-		permissions = new DualListModel<Permission>(permissionsSource, permissionsTarget);
+			permissions = new DualListModel<Permission>(permissionsSource, permissionsTarget);
 
-		List<Permission> permissionList = this.getPermissionService().findAllByUserId(user.getId());
+			List<Permission> permissionList = this.getPermissionService().findAllByUserId(user.getId());
 
-		this.getPermissions().setTarget(permissionList);
+			this.getPermissions().setTarget(permissionList);
 
-		for (Permission permission : permissionList) {
-			if (this.getPermissions().getSource().contains(permission)) {
-				this.getPermissions().getSource().remove(permission);
+			for (Permission permission : permissionList) {
+				if (this.getPermissions().getSource().contains(permission)) {
+					this.getPermissions().getSource().remove(permission);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("An error happenned, please call the system administrator."));
 		}
-
 	}
 
 	public void associateUser() {
-		List<Permission> permissionList = this.getPermissions().getTarget();
+		try {
+			List<Permission> permissionList = this.getPermissions().getTarget();
 
-		this.getUserHasPermissionsService().deleteByUser(this.getUser());
+			this.getUserHasPermissionsService().deleteByUser(this.getUser());
 
-		List<UserHasPermissions> userHasPermissionsList = new ArrayList<UserHasPermissions>(0);
-		for (Permission permission : permissionList) {
+			List<UserHasPermissions> userHasPermissionsList = new ArrayList<UserHasPermissions>(0);
+			for (Permission permission : permissionList) {
 
-			UserHasPermissions userPermissions = new UserHasPermissions(
-					new UserHasPermissionPK(this.getUser().getId(), permission.getId()));
-			userPermissions.setUser(this.getUser());
-			userPermissions.setPermission(permission);
-			userHasPermissionsList.add(userPermissions);
+				UserHasPermissions userPermissions = new UserHasPermissions(
+						new UserHasPermissionPK(this.getUser().getId(), permission.getId()));
+				userPermissions.setUser(this.getUser());
+				userPermissions.setPermission(permission);
+				userHasPermissionsList.add(userPermissions);
 
+			}
+
+			if (!userHasPermissionsList.isEmpty()) {
+				this.getUserHasPermissionsService().saveAll(userHasPermissionsList);
+			}
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Association(s) made with success!"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("An error happenned, please call the system administrator."));
 		}
-
-		if (!userHasPermissionsList.isEmpty()) {
-			this.getUserHasPermissionsService().saveAll(userHasPermissionsList);
-		}
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Association(s) made with success!"));
-
 	}
 
 	//////////////////////////////////////////////
