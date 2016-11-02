@@ -6,21 +6,21 @@ import br.com.freire.app.model.User;
 
 public interface UserService {
 
-	public User findById(Long id);
+	public User findById(Long id) throws Exception ;
 	
-	public List<User> list();
+	public List<User> list() throws Exception;
 	
-	public User save(User user);
+	public User save(User user) throws Exception;
 	
-	public User update(User user);
+	public User update(User user) throws Exception;
 	
-	public void remove(User user);
+	public void remove(User user) throws Exception;
 	
-	public void saveAll(List<User> users);
+	public void saveAll(List<User> users) throws Exception;
 
-	public List<User> findAllByPermissionId(Long id);
+	public List<User> findAllByPermissionId(Long id) throws Exception;
 
-	public List<User> findAllByDepartmentId(Long id);
+	public List<User> findAllByDepartmentId(Long id) throws Exception;
 	
 	
 }

@@ -6,16 +6,16 @@ import br.com.freire.app.model.Permission;
 
 public interface PermissionService {
 
-	public Permission save(Permission permission);
+	public Permission save(Permission permission) throws Exception;
 	
-	public List<Permission> list();
+	public List<Permission> list() throws Exception;
 	
-	public Permission update(Permission permission);
+	public Permission update(Permission permission) throws Exception;
 	
-	public void remove(Permission permission);
+	public void remove(Permission permission) throws Exception;
 
-	public List<Permission> findAllByUserId(Long id);
+	public List<Permission> findAllByUserId(Long id) throws Exception;
 
-	public Permission findById(Long id);
+	public Permission findById(Long id) throws Exception;
 
 }

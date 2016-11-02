@@ -37,7 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public Department findById(Long id) {
+	public Department findById(Long id) throws Exception {
 		return this.getDepartmentRepository().findById(id);
 	}
 

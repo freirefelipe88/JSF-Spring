@@ -13,6 +13,6 @@ import br.com.freire.app.model.Permission;
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
 	@Query("select permission from Permission permission join permission.userHasPermissions userHasPermissions where userHasPermissions.user.id = :id")
-	List<Permission> findAllByUserId(@Param("id") Long id);
+	List<Permission> findAllByUserId(@Param("id") Long id) throws Exception;
 
 }

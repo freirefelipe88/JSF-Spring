@@ -36,7 +36,7 @@ public class PermissionServiceImpl implements PermissionService {
 	}
 
 	@Override
-	public List<Permission> findAllByUserId(Long id) {
+	public List<Permission> findAllByUserId(Long id) throws Exception {
 		return this.getPermissionRepository().findAllByUserId(id);
 	}
 	

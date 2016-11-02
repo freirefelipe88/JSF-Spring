@@ -56,7 +56,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void initShouldReturnDepartmentEmptyList(){
+	public void initShouldReturnDepartmentEmptyList() throws Exception{
 		
 		Mockito.when(this.getDepartmentService().list()).thenReturn(Collections.EMPTY_LIST);
 		
@@ -76,14 +76,14 @@ public class MBeanDepartmentTest{
 	}
 
 	@Test
-	public void initShouldThrowGenericError(){
+	public void initShouldThrowGenericError() throws Exception{
 		Mockito.doThrow(Exception.class).when(this.getDepartmentService()).list();
 		
 		this.getmBeanDepartment().init();
 	}
 	
 	@Test
-	public void saveShouldSucceed(){
+	public void saveShouldSucceed() throws Exception{
 		
 		Mockito.when(this.getDepartmentService().save(this.getMyDepartment())).thenReturn(this.getMyDepartment());
 		
@@ -96,7 +96,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void saveShouldThrowGenericError(){
+	public void saveShouldThrowGenericError() throws Exception{
 		Mockito.doThrow(Exception.class).when(this.getDepartmentService()).save(this.getMyDepartment());
 		
 		this.getmBeanDepartment().setDepartment(this.getMyDepartment());
@@ -107,7 +107,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void updateShouldSucceed(){
+	public void updateShouldSucceed() throws Exception{
 		
 		Mockito.when(this.getDepartmentService().update(this.getMyDepartment())).thenReturn(this.getMyDepartment());
 		
@@ -120,7 +120,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void updateShouldThrowGenericError(){
+	public void updateShouldThrowGenericError() throws Exception{
 		Mockito.doThrow(Exception.class).when(this.getDepartmentService()).update(this.getMyDepartment());
 		
 		this.getmBeanDepartment().setDepartment(this.getMyDepartment());
@@ -131,7 +131,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void removeShouldSucceed(){
+	public void removeShouldSucceed() throws Exception{
 		
 		Mockito.doNothing().when(this.getDepartmentService()).remove(this.getMyDepartment());
 		
@@ -152,7 +152,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void removeShouldThrowGenericError(){
+	public void removeShouldThrowGenericError() throws Exception{
 		Mockito.doThrow(Exception.class).when(this.getDepartmentService()).remove(this.getMyDepartment());
 		
 		this.getmBeanDepartment().setDepartment(this.getMyDepartment());
@@ -161,7 +161,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void typeOperationAssociateShouldSucceed(){
+	public void typeOperationAssociateShouldSucceed() throws Exception{
 		
 		List<User> userList = this.getMyUserList();
 		userList.add(new User(2L, "Pamela", "Manager"));		
@@ -177,7 +177,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void typeOperationAssociateShouldThrowGenericError(){
+	public void typeOperationAssociateShouldThrowGenericError() throws Exception{
 		
 		Mockito.doThrow(Exception.class).when(this.getUserService()).list();
 		
@@ -186,7 +186,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void associateUserShouldSucceed(){
+	public void associateUserShouldSucceed() throws Exception{
 		Mockito.when(this.getUserService().findAllByDepartmentId(1L)).thenReturn(this.getMyUserList());
 		Mockito.doNothing().when(this.getUserService()).saveAll(this.getMyUserList());
 		
@@ -197,7 +197,7 @@ public class MBeanDepartmentTest{
 	}
 	
 	@Test
-	public void associateUserShouldThrowGenericError(){
+	public void associateUserShouldThrowGenericError() throws Exception{
 		Mockito.doThrow(Exception.class).when(this.getUserService()).findAllByDepartmentId(1L);
 		
 		this.getmBeanDepartment().setDepartment(this.getMyDepartment());

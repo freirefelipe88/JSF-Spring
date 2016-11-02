@@ -6,13 +6,13 @@ import br.com.freire.app.model.Department;
 
 public interface DepartmentService {
 
-	public Department save(Department department);
+	public Department save(Department department) throws Exception;
 	
-	public List<Department> list();
+	public List<Department> list() throws Exception;
 	
-	public Department update(Department department);
+	public Department update(Department department) throws Exception;
 	
-	public void remove(Department department);
+	public void remove(Department department) throws Exception;
 
-	public Department findById(Long id);
+	public Department findById(Long id) throws Exception;
 }

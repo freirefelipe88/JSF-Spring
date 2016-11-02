@@ -13,8 +13,8 @@ import br.com.freire.app.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select user from User user join user.userHasPermissions userHasPermissions where userHasPermissions.permission.id = :id")
-	public List<User> findAllByPermissionId(@Param("id") Long permissionId);
+	public List<User> findAllByPermissionId(@Param("id") Long permissionId) throws Exception;
 
-	public List<User> findAllByDepartmentId(Long id);
+	public List<User> findAllByDepartmentId(Long id) throws Exception;
 
 }

@@ -12,25 +12,27 @@ import br.com.freire.app.service.PermissionService;
 
 @ManagedBean
 @RequestScoped
-public class PermissionConverter implements Converter{
+public class PermissionConverter implements Converter {
 
 	@ManagedProperty(value = "#{permissionServiceImpl}")
 	private PermissionService permissionService;
-	
+
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
-
-		if(value != null && !"".equals(value)){
-			Permission permission = this.getPermissionService().findById(Long.parseLong(value));
-			return permission;
+		try {
+			if (value != null && !"".equals(value)) {
+				Permission permission = this.getPermissionService().findById(Long.parseLong(value));
+				return permission;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 		return null;
 	}
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		if(value != null){
+		if (value != null) {
 			Permission permission = (Permission) value;
 			return String.valueOf(permission.getId());
 		}
@@ -44,6 +46,5 @@ public class PermissionConverter implements Converter{
 	public void setPermissionService(PermissionService permissionService) {
 		this.permissionService = permissionService;
 	}
-
 
 }

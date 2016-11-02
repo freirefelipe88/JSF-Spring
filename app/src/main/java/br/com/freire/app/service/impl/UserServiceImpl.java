@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public List<User> findAllByPermissionId(Long id) {
+	public List<User> findAllByPermissionId(Long id) throws Exception {
 		return this.getUserRepository().findAllByPermissionId(id);
 	}
 	
 	@Override
-	public List<User> findAllByDepartmentId(Long id) {
+	public List<User> findAllByDepartmentId(Long id) throws Exception {
 		return this.getUserRepository().findAllByDepartmentId(id);
 	}
 

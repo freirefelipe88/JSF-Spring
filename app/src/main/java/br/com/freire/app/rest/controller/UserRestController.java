@@ -20,7 +20,7 @@ public class UserRestController {
 	private UserService userService;
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public @ResponseBody List<User> list(){
+	public @ResponseBody List<User> list() throws Exception{
 		
 		List<User> users = this.getUserService().list();
 		
@@ -29,14 +29,14 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="/user/{userId}", method=RequestMethod.GET)
-    public @ResponseBody User findById(@PathVariable long userId) {
+    public @ResponseBody User findById(@PathVariable long userId) throws Exception {
         User user = this.getUserService().findById(userId);
 		
         return user;
     }
 	
 	@RequestMapping(value = "/saveUser/{name}", method = RequestMethod.GET)
-	public @ResponseBody User save(@PathVariable String name){
+	public @ResponseBody User save(@PathVariable String name) throws Exception{
 		
 		User user = new User();
 		user.setName(name);
@@ -47,7 +47,7 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value = "/editUser/{id}/{name}/{description}")
-	public @ResponseBody User edit(@PathVariable("id") long id, @PathVariable("name") String name, @PathVariable("description") String description){
+	public @ResponseBody User edit(@PathVariable("id") long id, @PathVariable("name") String name, @PathVariable("description") String description) throws Exception{
 		
 		User user = new User();
 		user.setId(id);
@@ -58,7 +58,7 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value = "/deleteUser/{id}")
-	public @ResponseBody String remove(@PathVariable("id") long id){
+	public @ResponseBody String remove(@PathVariable("id") long id) throws Exception{
 		
 		User user = this.getUserService().findById(id);
 		this.getUserService().remove(user);

@@ -11,6 +11,6 @@ import br.com.freire.app.model.Department;
 public interface DepartmentRepository extends JpaRepository<Department, Long>{
 
 	@Query("select department from Department department join department.userList user where user.id = :id")
-	public Department findById(@Param("id") Long id);
+	public Department findById(@Param("id") Long id) throws Exception;
 
 }
