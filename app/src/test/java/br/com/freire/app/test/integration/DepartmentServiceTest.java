@@ -35,7 +35,56 @@ public class DepartmentServiceTest {
 	@Test
 	@Transactional
 	public void findById() throws Exception{
-		Department department = this.getDepartmentService().findById(1L);
+		Department department = new Department();
+		department.setName("Felipe teste");
+		department.setDescription("teste");
+		
+		Department savedDepartment = this.getDepartmentService().save(department);
+		
+		Department result = this.getDepartmentService().findById(savedDepartment.getId());
+	}
+	
+	@Test
+	@Transactional
+	public void insert() throws Exception{
+		Department department = new Department();
+		department.setName("Felipe teste");
+		department.setDescription("teste");
+		
+		Department result = this.getDepartmentService().save(department);
+		
+		Assert.assertNotNull(result);
+		Assert.assertNotNull(result.getId());
+	}
+	
+	@Test
+	@Transactional
+	public void edit() throws Exception{
+		Department department = new Department();
+		department.setName("Felipe teste");
+		department.setDescription("teste");
+		
+		Department result = this.getDepartmentService().save(department);
+		
+		result.setName("Editado");
+		long expectedId = result.getId();
+		
+		result = this.getDepartmentService().update(result);
+		
+		Assert.assertNotNull(result);
+		Assert.assertEquals("Expected Id is not the same", expectedId, result.getId().longValue());
+	}
+	
+	@Test
+	@Transactional
+	public void delete() throws Exception{
+		Department department = new Department();
+		department.setName("Felipe teste");
+		department.setDescription("teste");
+		
+		Department result = this.getDepartmentService().save(department);
+		
+		this.getDepartmentService().remove(result);
 	}
 
 	public DepartmentService getDepartmentService() {
