@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.freire.app.configuration.AppConfig;
@@ -16,6 +17,7 @@ import br.com.freire.app.configuration.PersistenceConfig;
 import br.com.freire.app.model.Department;
 import br.com.freire.app.service.DepartmentService;
 
+@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MyAppInitializer.class, AppConfig.class, PersistenceConfig.class})
 public class DepartmentServiceTest {
